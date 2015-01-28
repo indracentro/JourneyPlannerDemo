@@ -1,0 +1,106 @@
+﻿@model JourneyPlannerDemo.Models.JourneyPlanner
+@using System.Collections
+@using MDVApi.Objects.Enums
+@using MvcHelpers
+@using System.Collections.Generic
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Journey </legend>
+
+        <div class="row">
+            <div class="col-md-8 col-lg-offset-4">
+
+                <div id="divBasic">
+                    <div class="form-group">
+                        <div class="control-label">FROM</div>
+                        @Html.TextBoxFor(model => model.Query.Origin)
+                    </div>
+
+                    <div class="form-group">
+                        <div class="control-label">
+                            TO
+                        </div>
+                        @Html.TextBoxFor(model => model.Query.Destination)
+                    </div>
+
+                    <div class="form-group">
+                        I need to @*@Html.DropDownList("ddlJourneyTimeType", (IEnumerable<T>)Enum.GetValues(MDVApi.Objects.Enums.JourneyTimeType.DepartingAfter))*@
+                        
+                        <select id="ddlDepArr">
+                                      <option value="d">Depart after</option>
+                                      <option value="a">Arrive by</option>
+                                  </select>
+
+                        @Html.DatepickerTextBoxFor(m => m.Query.JourneyDateTime)
+                    </div>
+                </div>
+                <div><i id="iMobility" class="glyphicon glyphicon-plus-sign"></i>Mobility options
+                    <i id="iTravelOpts" class="glyphicon glyphicon-plus-sign"></i>Travel options
+                </div>
+
+                <div id="divOptions">
+                    <div id="divMobility" class="form-inline toggleable">
+                        <h5>Mobility</h5>
+                        @Html.CheckBoxFor(model => model.Query.MobilityCannotUseEscalators)
+                        @Html.Label("Avoid Escalators")
+
+                        @Html.CheckBoxFor(model => model.Query.MobilityCannotUseStairs)
+                        @Html.Label("Avoid Stairs")
+
+                        @Html.CheckBoxFor(model => model.Query.MobilityStepFreeJourney)
+                        @Html.Label("Avoid Walking")
+
+                        @Html.CheckBoxFor(model => model.Query.MobilityRequireAssistance)
+                        @Html.Label("Require Assistance")
+                        
+                        @Html.CheckBoxFor(model => model.Query.MobilityWheelChairAccessible)
+                        @Html.Label("Wheelchair access")
+                    </div>
+
+
+
+                    <div id="divTravelOpts" class="form-inline toggleable">
+                        <h5>Travel By</h5>
+                        @Html.CheckBoxFor(model => model.Query.UseBus)
+                        @Html.Label("Bus")
+
+                        @Html.CheckBoxFor(model => model.Query.UseCar)
+                        @Html.Label("Car")
+
+                        @Html.CheckBoxFor(model => model.Query.UseCoach)
+                        @Html.Label("Coach")
+
+                        @Html.CheckBoxFor(model => model.Query.UseCycle)
+                        @Html.Label("Bike")
+
+                        @Html.CheckBoxFor(model => model.Query.UseWalk)
+                        @Html.Label("Walk")
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <input type="submit" class="btn" value="Plan Journey"/>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryui")
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript" src="/Scripts/jp.js"></script>
+}
+
+

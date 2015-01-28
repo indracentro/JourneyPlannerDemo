@@ -1,0 +1,108 @@
+﻿@using MDVApi.Util
+@model JourneyPlannerDemo.Models.JourneyPlanner
+
+@{
+    ViewBag.Title = "Results";
+}
+
+<style type="text/css">
+    #routeTrail {
+        padding: 12px;
+    }
+
+        #routeTrail IMG {
+            height: 50px;
+        }
+        #routeTrail .gt {
+            height: 30px;
+        }
+</style>
+
+<h2>Journey Results</h2>
+
+
+<p>Found @Model.Results.Routes.Count suggested routes.</p>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="well well-sm">
+            <p><span class="text-muted">From: </span>@Model.Query.Origin</p>
+            <p><span class="text-muted">To: </span>@Model.Query.Destination</p>
+            <p><span class="text-muted">Leaving: </span>@Model.Query.JourneyDateTime</p>
+            <p>
+                <span class="text-muted">Preferences: </span>
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+
+        @foreach (var r in Model.Results.Routes)
+        {
+            <div>
+                <p class="text-primary">@r.GetDescription()</p>
+
+                <small>Changes: @r.PartialRoutes.Count</small>
+
+                <div id="routeTrail" style="height: 125px;">
+
+                    @foreach (var tm in r.GetTrail())
+                    {
+                        switch (tm.GetDescription().ToLower())
+                        {
+                            case "cycle":
+                                @:<img src="/Content/images/cycle.png" alt="cycle" />
+                            break;
+
+                            case "bus":
+                            @:<img class="" src="/Content/images/bus.png" alt="x" />
+                            break;
+
+                            case "train":
+                            @:<img class="" src="/Content/images/train.png" alt="train" />
+                        break;
+
+                            case "tram":
+                            @:<img class="" src="/Content/images/train.png" alt="tram" />
+                        break;
+
+                            case "walk":
+                            @:<img class="" src="/Content/images/walk.png" alt="walk" />
+                    break;
+                            default:
+                            @:<img class="" src="/Content/images/warningtriangle.png" alt="default" />
+                        break;
+
+                        }
+                        
+                        <img src="/Content/images/gt.png" class="gt" alt="next" />
+                    }
+                </div>
+
+
+                <ul>
+                    @foreach (var partialRoute in r.PartialRoutes)
+                    {
+                        <li>
+
+                            <small>
+                                <strong>@partialRoute.Transport.MainMode<br /></strong>
+                                @partialRoute.Description
+
+                                @(partialRoute.Distance)m  (@partialRoute.Duration minutes)
+                                <br />Type: @partialRoute.RouteType
+                                <br />@partialRoute.DepartureTime.ToString("HH:mm") dep
+                                @partialRoute.ArrivalTime.ToString("HH:mm") arr
+
+                            </small>
+
+                        </li>
+                    }
+                </ul>
+                }
+            </div>
+        }
+    </div>
+</div>
